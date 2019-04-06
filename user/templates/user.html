@@ -1,0 +1,6 @@
+{% extends "bloglist.html" %}
+{% block content %}
+    {% autoescape off %}
+        {{ article.article }}
+    {% endautoescape %}
+{% endblock %}

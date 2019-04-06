@@ -1,0 +1,12 @@
+{% extends "register.html" %}
+{% block title %}
+    <title>修改</title>
+{% endblock %}
+{% block mainbody %}
+    <input type="text" placeholder="Username" name="username" readOnly="true" value={{ request.user.username }}>
+    <input type="password" placeholder="Password" name="password">
+    <button type="submit" id="login-button">Modify</button>
+{% endblock %}
+{%  block content   %}
+    <h1>修改</h1>
+    {% endblock %}

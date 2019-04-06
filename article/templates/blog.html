@@ -1,0 +1,78 @@
+{% extends "bloglist.html" %}
+
+{% block content %}
+    <style>
+
+
+        input:focus {
+            height: 48px;
+        }
+    </style>
+    <div style="text-align: center;">
+        <h1>{{ article.title }}</h1>
+        {% autoescape off %}
+            {{ article.article }}
+        {% endautoescape %}
+        <hr/>
+    </div>
+    <form style="text-align: right" action="" method="post">
+        {% csrf_token %}
+        {#    <textarea style="width: 100%;">在这里输入</textarea>#}
+        <input type="text" style="width:100%;display: none" name='article_id' value={{ article.id }}>
+        <input type="text" style="width:100%" name='comment' required="required"/>
+        <button style="margin-top:5px" type="submit">回复作者</button>
+    </form>
+    <hr/>
+    <table class="table">
+        <tbody>
+        {% for dict,replys in dicts.items %}
+            <tr>
+                <td align="center" style='width:10%'><h3><a style="text-align: center;width:20%"
+                                                            href={% url 'user:information' dict.user.user %}>{{ dict.user }}</a>
+                </h3></td>
+
+                <td><h2>: {{ dict.comment }}</h2>
+                    <table class="table" style="background:#F0F0F0">
+                        <tbody>
+                        {% for reply in replys %}
+                            <tr>
+                                <td align="center" width="5px"><a
+                                        href={% url 'user:information' dict.user %}>{{ reply.user }}</a></td>
+                                <td>:{{ reply.reply }}</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </td>
+                <td>
+                    <a href="#{{ dict.id }}"  style="float: right" onclick="display({{ dict.id }})">回复</a>
+                    <form class="reply-form" id='{{ dict.id }}'   style="text-align: right;display: none" action="/blog/article/{{ article.id }}/{{ dict.id }}"
+                          method="post">
+                        {% csrf_token %}
+                        <input type="text" style="width:100%;display: none" name='id' required="required"
+                               value={{ dict.id }}>
+                        <input type="text" style="width:100%" name='reply' required="required">
+                        <button style="float: right" type="submit">回复</button>
+                    </form>
+                    <script>
+
+                        function display(id) {
+                            {#var replyForm = document.getElementsByClassName("reply-form");#}
+                            {#for (var i = 0;i<replyForm.length;i++){#}
+                            {#    replyForm[i].style.display = "none";#}
+                            {#}#}
+                                $(".reply-form").hide();
+                            var obj = document.getElementById(id);
+                            obj.style.display = "block";
+                        };
+                    </script>
+                </td>
+            </tr>
+
+            <!-- 模态框（Modal） -->
+        {% endfor %}
+        </tbody>
+    </table>
+
+{% endblock %}
+
